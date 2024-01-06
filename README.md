@@ -9,7 +9,7 @@ sequenceDiagram
   server->>wordleResultsEmail: do you have any emails from x, y, z?
   wordleResultsEmail-->>server: Emails
   server->>wordleResultsEmail: Can I have yesterdays results?
-  wordleResultsEmail-->>AaronEmail: Yesterdays results email
+  wordleResultsEmail-->>server: Yesterdays results email
   server->>wordleResultsEmail: Here are todays results
   wordleResultsEmail->>AaronEmail: Results
 ```
