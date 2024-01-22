@@ -7,6 +7,16 @@ class Settings(BaseSettings):
     http_port: int = Field(8000)
     server_name: str = "wordle-leaderboard"
 
+    google_client_id: str
+    google_project_id: str
+    google_auth_uri: str
+    google_token_uri: str
+    google_auth_provider_x509_cert_url: str
+    google_client_secret: str
+    google_redirect_uris: list[str]
+
+    google_base_url: str
+
 
 # will be initialized on startup
 _settings = None
