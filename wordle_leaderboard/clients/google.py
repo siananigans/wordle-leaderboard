@@ -1,5 +1,6 @@
 from google.auth.transport.requests import Request
 from googleapiclient.errors import HttpError
+from googleapiclient.discovery import build
 from httpx import AsyncClient
 
 from wordle_leaderboard.clients.base import BaseClient
@@ -22,7 +23,7 @@ class GoogleClient(BaseClient):
             self.credentials()
             url = self.build_url("/users/me/messages")
             resp = await self.http_client.get(
-                auth=self.creds,
+                auth=self.creds.token,
                 url=url,
             )
             resp.raise_for_status()
@@ -35,3 +36,10 @@ class GoogleClient(BaseClient):
         except HttpError as error:
             # TODO(developer) - Handle errors from gmail API.
             print(f"An error occurred: {error}")
+
+    async def get_emails_build(self):
+        self.credentials()
+        gmail = build("gmail", "v1", credentials=self.creds)
+        results = gmail.users().threads().list(userId="me").execute()
+        emails = results.get("threads", [])
+        return emails
