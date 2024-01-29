@@ -7,7 +7,8 @@ import uvicorn
 import click
 from fastapi import FastAPI
 
-from wordle_leaderboard.settings import Settings
+from wordle_leaderboard.api.routes import root_router
+from wordle_leaderboard.settings import Settings, init_settings
 
 
 @click.command()
@@ -15,6 +16,8 @@ from wordle_leaderboard.settings import Settings
 def main(reload=False):
     settings = Settings()
     app = FastAPI(title=settings.server_name)
+    app.include_router(root_router)
+    init_settings(settings)
     uvicorn.run(
         app,
         loop="uvloop",

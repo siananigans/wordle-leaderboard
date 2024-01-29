@@ -17,7 +17,7 @@ class GoogleClient(BaseClient):
                 creds.refresh(Request())
         self.creds = creds
 
-    async def read_email(self):
+    async def get_emails(self):
         try:
             self.credentials()
             url = self.build_url("/users/me/messages")
@@ -29,6 +29,8 @@ class GoogleClient(BaseClient):
             resp_data = resp.json()
             if not resp_data:
                 print("No data")
+
+            return resp_data
 
         except HttpError as error:
             # TODO(developer) - Handle errors from gmail API.
