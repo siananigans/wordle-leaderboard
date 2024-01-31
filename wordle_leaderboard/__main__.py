@@ -6,22 +6,35 @@ import sys
 import uvicorn
 import click
 from fastapi import FastAPI
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from contextlib import asynccontextmanager
+
+
+from wordle_leaderboard.tasks.wordle_results import run_me_every_day
 from wordle_leaderboard.middleware.exception import catch_exceptions_middleware
-
-
 from wordle_leaderboard.api.routes import root_router
 from wordle_leaderboard.settings import Settings, init_settings
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    scheduler = AsyncIOScheduler()
+    scheduler.add_job(run_me_every_day, "interval", days=5)
+    scheduler.start()
+    yield
+    scheduler.shutdown()
 
 
 @click.command()
 @click.option("--reload", is_flag=True)
 def main(reload=False):
     settings = Settings()
-    app = FastAPI(title=settings.server_name)
+    app = FastAPI(title=settings.server_name, lifespan=lifespan)
     app.include_router(root_router)
     # Add exception handler middleware to prevent server crashes
     app.middleware("http")(catch_exceptions_middleware)
     init_settings(settings)
+
     uvicorn.run(
         app,
         loop="uvloop",
