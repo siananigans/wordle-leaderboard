@@ -18,9 +18,14 @@ async def handle_get_emails(
     google_client: GoogleClient = Depends(get_google_client),
 ):
     try:
-        emails = await google_client.get_emails(queries=["from:aaron00brogan@gmail.com"])
+        emails = await google_client.get_emails(
+            queries=["from:aaron00brogan@gmail.com"]
+        )
         emails = Messages(**emails)
-        emails = [await google_client.get_emails(email_id=message.id) for message in emails.messages]
+        emails = [
+            await google_client.get_emails(email_id=message.id)
+            for message in emails.messages
+        ]
         return emails
     except HTTPStatusError:
         return PlainTextResponse(

@@ -40,7 +40,7 @@ class GoogleClient(BaseClient):
             resp = await self.http_client.get(
                 headers={"Authorization": "Bearer " + self.creds.token},
                 url=url,
-                params=params
+                params=params,
             )
             resp.raise_for_status()
             resp_data = resp.json()

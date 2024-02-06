@@ -20,7 +20,7 @@ from wordle_leaderboard.settings import Settings, init_settings
 async def lifespan(app: FastAPI):
     scheduler = AsyncIOScheduler()
     await todays_wordle_results()
-    scheduler.add_job(todays_wordle_results, "interval", days=5)
+    scheduler.add_job(todays_wordle_results, "interval", days=1)
     scheduler.start()
     yield
     scheduler.shutdown()
