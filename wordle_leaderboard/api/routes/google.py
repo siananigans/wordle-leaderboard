@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends
 from fastapi.responses import PlainTextResponse
 from httpx import HTTPStatusError
 
+from wordle_leaderboard.api.schemas import Messages
 from wordle_leaderboard.clients.google import GoogleClient
 from wordle_leaderboard.clients.google import GoogleCredentialsError
 from wordle_leaderboard.api.dependencies import get_google_client
@@ -17,7 +18,9 @@ async def handle_get_emails(
     google_client: GoogleClient = Depends(get_google_client),
 ):
     try:
-        emails = await google_client.get_emails()
+        emails = await google_client.get_emails(queries=["from:aaron00brogan@gmail.com"])
+        emails = Messages(**emails)
+        emails = [await google_client.get_emails(email_id=message.id) for message in emails.messages]
         return emails
     except HTTPStatusError:
         return PlainTextResponse(

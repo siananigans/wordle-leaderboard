@@ -26,13 +26,21 @@ class GoogleClient(BaseClient):
         except Exception:
             raise GoogleCredentialsError()
 
-    async def get_emails(self):
+    async def get_emails(self, queries=None, email_id=None):
         try:
             self.credentials()
-            url = self.build_url("users/me/messages")
+            if not email_id:
+                url = self.build_url("users/me/messages")
+            else:
+                url = self.build_url("users/me/messages/" + email_id)
+            params = {}
+            if queries:
+                for query in queries:
+                    params["q"] = query
             resp = await self.http_client.get(
                 headers={"Authorization": "Bearer " + self.creds.token},
                 url=url,
+                params=params
             )
             resp.raise_for_status()
             resp_data = resp.json()
