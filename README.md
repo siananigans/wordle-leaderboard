@@ -9,11 +9,11 @@ A python web app to keep track of scores on the New York Times "Wordle" game.
 sequenceDiagram
   participant server
   participant wordleResultsEmail
-  participant AaronEmail
+  participant recipientEmail
   server->>wordleResultsEmail: do you have any emails from x, y, z?
   wordleResultsEmail-->>server: Emails
   server->>wordleResultsEmail: Can I have yesterdays results?
   wordleResultsEmail-->>server: Yesterdays results email
   server->>wordleResultsEmail: Here are todays results
-  wordleResultsEmail->>Email: Results
+  wordleResultsEmail->>recipientEmail: Results
 ```
