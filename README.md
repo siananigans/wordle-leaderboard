@@ -15,5 +15,5 @@ sequenceDiagram
   server->>wordleResultsEmail: Can I have yesterdays results?
   wordleResultsEmail-->>server: Yesterdays results email
   server->>wordleResultsEmail: Here are todays results
-  wordleResultsEmail->>AaronEmail: Results
+  wordleResultsEmail->>Email: Results
 ```
